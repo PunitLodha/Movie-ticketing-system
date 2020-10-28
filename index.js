@@ -5,6 +5,7 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import { handleError } from './utils/index.js';
 import ErrorHandler from './utils/error.js';
+import apiRoutes from './routes/index.js';
 import setupDb from './utils/db.js';
 
 config({ path: 'config/config.env' });
@@ -15,6 +16,9 @@ setupDb();
 
 app.use(cors());
 app.use(morgan('common'));
+app.use(express.json());
+
+app.use('/api', apiRoutes);
 
 app.use((req, res) => {
   const err = new ErrorHandler(500, 'Not Found');
