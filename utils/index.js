@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable implicit-arrow-linebreak */
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -57,7 +58,8 @@ export const cmpPassword = (plainPassword, hashPassword) =>
  * @return Returns the jwt token valid within the jwt expiry time
  */
 export const newToken = (user) =>
-  jwt.sign({ id: user._id }, process.env.JWT_KEY, {
+  // TODO change the id to user id her, and make sure it works
+  jwt.sign({ id: user.userId }, process.env.JWT_KEY, {
     expiresIn: process.env.JWT_EXP,
   });
 
