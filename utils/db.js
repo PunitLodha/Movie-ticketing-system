@@ -23,7 +23,7 @@ function setupDb() {
 
 
     db.query('CREATE TABLE IF NOT EXISTS user(userID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(20), \
-      mobile VARCHAR(20))', (err, results, fields) => {
+      mobile VARCHAR(20), email VARCHAR(20), pass VARCHAR(20))', (err, results, fields) => {
       console.log(results); // results contains rows returned by server
     });
 
