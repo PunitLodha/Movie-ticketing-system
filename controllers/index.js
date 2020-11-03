@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable import/extensions */
 import { getDB } from '../utils/db.js';
 import ErrorHandler from '../utils/error.js';
@@ -28,12 +29,18 @@ export const login = async (req, res, next) => {
 
     const token = newToken(user);
 
+    // check if admin
+    let isAdmin = false;
+    if (email === 'admin@admin.com') {
+      isAdmin = true;
+    }
+
     // Successfully returns the token as a response along with the user details
     res.status(200).json({
       success: true,
       data: {
         token: `Bearer ${token}`,
-        user: { ...user, password: undefined },
+        user: { ...user, isAdmin, password: undefined },
       },
       error: {},
     });
