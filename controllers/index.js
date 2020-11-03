@@ -9,7 +9,7 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
     let error;
 
-    // TODO  find the user using the email
+    // find the user using the email
     const [results] = await getDB().query('SELECT * FROM user WHERE email=?', [email]);
 
     // User not found in the db
