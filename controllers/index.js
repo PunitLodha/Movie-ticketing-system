@@ -78,4 +78,13 @@ export const register = async (req, res, next) => {
   } catch (err) {
     return handleError(err, res);
   }
+
+  export const movies = function(req, res, next){
+  await getDB().query('SELECT Name \
+FROM (SELECT j.Name, SUM(No_of_seats) \
+FROM (Event e JOIN Show s ON e.EventID = s.EventID) j JOIN Ticket t ON j.ShowID = t.ShowID\ 
+GROUP BY (EventID) \
+ORDER BY 2 DESC) \
+LIMIT 5');
+};
 };
