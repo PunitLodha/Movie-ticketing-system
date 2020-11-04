@@ -77,7 +77,7 @@ async function setupDb() {
 
     await db.query(
       'CREATE TABLE IF NOT EXISTS ticket(ticketID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, no_seats INT, userID INT, showID INT,\
-      CONSTRAINT fk1_user FOREIGN KEY (userID) REFERENCES user(userID), \
+      seats VARCHAR(30), CONSTRAINT fk1_user FOREIGN KEY (userID) REFERENCES user(userID), \
       CONSTRAINT fk_show FOREIGN KEY (showID) REFERENCES shows(showID))',
     );
 
