@@ -8,7 +8,7 @@ export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     let error;
-
+  
     // find the user using the email
     const [results] = await getDB().query('SELECT * FROM user WHERE email=?', [email]);
 
@@ -20,6 +20,7 @@ export const login = async (req, res, next) => {
 
     const user = results[0];
     const match = await cmpPassword(password, user.password);
+    
 
     // Password provided does not match the password in the db
     if (!match) {
@@ -78,13 +79,87 @@ export const register = async (req, res, next) => {
   } catch (err) {
     return handleError(err, res);
   }
+};
 
-  export const movies = function(req, res, next){
-  await getDB().query('SELECT Name \
-FROM (SELECT j.Name, SUM(No_of_seats) \
-FROM (Event e JOIN Show s ON e.EventID = s.EventID) j JOIN Ticket t ON j.ShowID = t.ShowID\ 
-GROUP BY (EventID) \
-ORDER BY 2 DESC) \
-LIMIT 5');
+export const ticket = async(req, res, next) =>{
+  try{
+     const { no_seats, userID, showID, seats, screenID } = req.body;
+
+     //check if no. of seats exceed 15
+     if(no_seats>15) {
+        const err = new ErrorHandler(401, 'Cannot book more than 15 seats at a time');
+        return handleError(err, res);
+     }
+
+     const seat_no = seats.map(function (get_seat_detail){
+      return get_seat_detail.seat_no 
+      });
+      const type = seats.map(function (get_seat_detail){
+        return get_seat_detail.type
+       });
+      const price = seats.map(function (get_seat_detail){
+        return get_seat_detail.price
+       });
+      const row = seats.map(function (get_seat_detail){
+        return get_seat_detail.ro
+       });
+
+     //add new ticket
+     await getDB().query('INSERT INTO ticket(no_seats, userID, showID, seat_number) VALUES (?,?,?,?)', [no_seats, userID, showID, String(seat_no)]);
+
+     //add new seat
+     var i;
+     for (i=0; i< no_seats ; i++) {
+        await getDB().query('INSERT INTO seat(seat_no, type, price, ro, screenID) VALUES (?,?,?,?,?)', [seat_no[i], type[i], price[i], row[i], screenID]);
+     }
+     return res.status(200).json({
+        success: true,
+        data: {},
+        msg: 'Booked ticket successfully',
+        error: {},
+     });
+  }catch (err){
+     return handleError(err, res);  
+  }
 };
+
+export const get_card_details = async(req, res, next) => {
+  try{
+    const { userID } = req.body;
+    let error;
+
+    //find card using userID
+    const [results] = await getDB().query('SELECT * FROM card WHERE userID=?', [userID]);
+
+    // card not found in the db
+    if (!results[0]) {
+      error = new ErrorHandler(403, 'Found no card');
+      return handleError(error, res);
+    }   
+    return res.status(200).json({
+      success: true,
+      data: {},
+      msg: 'Found card',
+      error: {},
+    });
+  } catch (err) {
+    return handleError(err, res);
+  }
+}; 
+
+export const post_card_details = async(req, res, next) =>{
+  try{
+    const{ card_number, name, userID } = req.body;
+    //insert card in db
+    await getDB().query('INSERT INTO card(card_number, name, userID) VALUES (?,?,?)', [card_number, name, userID]);
+    return res.status(200).json({
+      success: true,
+      data: {},
+      msg: 'Inserted new card successfully',
+      error: {},
+    });
+  }catch (err) {
+    return handleError(err, res);
+  }
 };
+

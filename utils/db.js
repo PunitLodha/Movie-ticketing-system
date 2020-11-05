@@ -65,8 +65,8 @@ async function setupDb() {
     );
 
     await db.query(
-      'CREATE TABLE IF NOT EXISTS seat(seat_no INT NOT NULL PRIMARY KEY, type VARCHAR(20), price INT, \
-  ro VARCHAR(20), screenID INT, CONSTRAINT fk_screen FOREIGN KEY (screenID) REFERENCES screen(screenID))',
+      'CREATE TABLE IF NOT EXISTS seat(seat_no VARCHAR(10) NOT NULL, type VARCHAR(20), price INT, \
+  ro VARCHAR(20), screenID INT, PRIMARY KEY (seat_no, ro, screenID), CONSTRAINT fk_screen FOREIGN KEY (screenID) REFERENCES screen(screenID))',
     );
 
     await db.query(
@@ -77,7 +77,7 @@ async function setupDb() {
 
     await db.query(
       'CREATE TABLE IF NOT EXISTS ticket(ticketID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, no_seats INT, userID INT, showID INT,\
-      seats VARCHAR(30), CONSTRAINT fk1_user FOREIGN KEY (userID) REFERENCES user(userID), \
+      seat_number VARCHAR(45), CONSTRAINT fk1_user FOREIGN KEY (userID) REFERENCES user(userID), \
       CONSTRAINT fk_show FOREIGN KEY (showID) REFERENCES shows(showID))',
     );
 
