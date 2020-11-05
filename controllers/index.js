@@ -138,7 +138,7 @@ export const get_card_details = async(req, res, next) => {
     }   
     return res.status(200).json({
       success: true,
-      data: {},
+      data: {results},
       msg: 'Found card',
       error: {},
     });
@@ -163,3 +163,18 @@ export const post_card_details = async(req, res, next) =>{
   }
 };
 
+export const movies = async(res,req,next) => {
+  try{
+  const[movie_results] = await getDB.query('SELECT m.*, e.* FROM Movie m JOIN Event e USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY e.EventID ORDER BY SUM(No_seats) DESC LIMIT 5;');
+  const[play_results] =  await getDB.query('SELECT p.*, e.* FROM Play p JOIN Event e USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY e.EventID ORDER BY SUM(No_seats) DESC LIMIT 5;');
+  const[talk_show_results] = await getDB.query('SELECT t.*, e.* FROM talk_show t JOIN Event e USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY e.EventID ORDER BY SUM(No_seats) DESC LIMIT 5;');
+  return res.status(200).json({
+   success : true,
+   data : {movie: movie_results , play : play_results ,talk_show : talk_show_results},
+   error : {},
+  })
+ } catch (err) {
+   return handleError(err,res);
+ } 
+ 
+ };
