@@ -6,7 +6,7 @@ import { ticket } from '../controllers/index.js';
 import { get_card_details} from '../controllers/index.js';
 import { post_card_details} from '../controllers/index.js';
 import { get_seat_avail } from '../controllers/index.js';
-
+import { all_movies } from '../controllers/index.js';
 
 const router = Router();
 
@@ -22,4 +22,5 @@ router.route('/shows/ticket/payment').post(post_card_details);
 
 router.route('/shows/screen/tickets/booked').get(get_seat_avail);
 
+router.route('/all_movies').get(all_movies);
 export default router;
