@@ -83,9 +83,9 @@ export const register = async (req, res, next) => {
 
 export const movies = async(res,req,next) => {
  try{
- const[movie_results] = await getDB.query(' SELECT name FROM (SELECT name,SUM(No_seats) FROM Movie JOIN Event USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY EventID ORDER BY 2 DESC LIMIT 5 )q;}');
- const[play_results] =  await getDB.query(' SELECT name FROM (SELECT name,SUM(No_seats) FROM Play JOIN Event USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY EventID ORDER BY 2 DESC LIMIT 5 )q;}');
- const[talk_show_results] = await getDB.query(' SELECT name FROM (SELECT name,SUM(No_seats) FROM Talk_show JOIN Event USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY EventID ORDER BY 2 DESC LIMIT 5 )q;}');
+ const[movie_results] = await getDB.query('SELECT m.*, e.* FROM Movie m JOIN Event e USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY e.EventID ORDER BY SUM(No_seats) DESC LIMIT 5;');
+ const[play_results] =  await getDB.query('SELECT p.*, e.* FROM Play p JOIN Event e USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY e.EventID ORDER BY SUM(No_seats) DESC LIMIT 5;');
+ const[talk_show_results] = await getDB.query('SELECT t.*, e.* FROM talk_show t JOIN Event e USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY e.EventID ORDER BY SUM(No_seats) DESC LIMIT 5;');
  return res.status(200).json({
   success : true,
   data : {movie: movie_results , play : play_results ,talk_show : talk_show_results},
@@ -95,4 +95,4 @@ export const movies = async(res,req,next) => {
   return handleError(err,res);
 } 
 
-};
+};, 
