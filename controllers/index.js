@@ -166,20 +166,30 @@ export const post_card_details = async(req, res, next) =>{
 export const get_seat_avail = async( req, res, next ) => {
   try{
     const { screenID } = req.body;
+    const [screen] = await getDB().query('SELECT * FROM screen WHERE screenID = ?', [screenID]);
+    if(!screen[0]){
+      error = new ErrorHandler(404, 'Screen does not exist');
+      return handleError(error, res);
+    }
     const [results] = await getDB().query('SELECT seat_no FROM seat WHERE screenID=?', [screenID]);
     if (!results[0]) {
-      error = new ErrorHandler(401, 'All seats available');
-      return handleError(error, res);
-    }   
-    const seats_booked = results.map(function (get_seat_booked){
+      return res.status(200).json({
+        success: true,
+        data: "All seats available",
+        msg: "",
+        error: {},
+      });
+    }else {   
+      const seats_booked = results.map(function (get_seat_booked){
       return get_seat_booked.seat_no 
       });
-    return res.status(200).json({
-      success: true,
-      data: seats_booked,
-      msg: 'Showing booked seats',
-      error: {},
-    });
+      return res.status(200).json({
+        success: true,
+        data: seats_booked,
+        msg: 'Showing booked seats',
+        error: {},
+      });
+    }
   } catch (err) {
     return handleError(err, res);
   }
@@ -200,3 +210,25 @@ export const movies = async(res,req,next) => {
    return handleError(err,res);
  } 
  };
+
+export const get_event_details = async ( req, res, next) => {
+  try{
+    const {eventID} = req.body;
+    const [play] = await getDB().query('SELECT * FROM (SELECT event.*, play.director, play.cast FROM event JOIN play ON event.eventID = play.eventID) AS event_play WHERE event_play.eventID = ?', [eventID]);
+    const [talk_show] = await getDB().query('SELECT * FROM (SELECT event.*, talk_show.speaker FROM event JOIN talk_show ON event.eventID = talk_show.eventID) AS event_talkshow WHERE event_talkshow.eventID = ?', [eventID]);
+    const [movie] = await getDB().query('SELECT * FROM (SELECT event.*, movie.director, movie.cast, movie.rating FROM event JOIN movie ON event.eventID = movie.eventID) AS event_movie WHERE event_movie.eventID = ?', [eventID]);
+    //wrong event id
+    if (!play[0] && !movie[0] && !talk_show[0]){
+      error = new ErrorHandler(404, 'No event found');
+      return handleError(error, res);
+    }
+    return res.status(200).json({
+      success: true,
+      data: {"Play" : play, "Movie" : movie, "Talk show" : talk_show},
+      msg: 'Showing the event',
+      error: {},
+    });
+  }catch (err) {
+    return handleError(err,res);
+  } 
+};
