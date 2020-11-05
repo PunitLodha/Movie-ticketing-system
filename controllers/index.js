@@ -232,3 +232,17 @@ export const get_event_details = async ( req, res, next) => {
     return handleError(err,res);
   } 
 };
+export const all_movies = async(res,req,next) => {
+  try{
+  const[movie_results] = await getDB().query('SELECT m.*, e.* FROM Movie m JOIN Event e USING (EventID);');
+  const[play_results] =  await getDB().query('SELECT p.*, e.* FROM Play p JOIN Event e USING (EventID);');
+  const[talk_show_results] = await getDB().query('SELECT t.*, e.* FROM talk_show t JOIN Event e USING (EventID);');
+  return res.status(200).json({
+   success : true,
+   data : {movie: movie_results , play : play_results ,talk_show : talk_show_results},
+   error : {},
+  });
+ } catch (err) {
+   return handleError(err,res);
+ } 
+ };
