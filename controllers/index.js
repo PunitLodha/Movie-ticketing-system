@@ -262,3 +262,26 @@ export const all_movies = async(res,req,next) => {
    return handleError(err,res);
  } 
  };
+
+export const get_shows = async(res,req,next) => {
+  try{
+    const {eventID} = req.body;
+    const [show_details] = await getDB().query('SELECT * FROM (SELECT * FROM Event JOIN Shows USING (EventID) JOIN Screen USING (ScreenID) JOIN Theatre USING (TheatreID)) AS event_details WHERE event_details.eventID = ?', [eventID]);
+   
+    //wrong event id
+    if (!show_details[0]){
+      error = new ErrorHandler(404, 'No event found');
+      return handleError(error, res);
+    }
+    else{
+    return res.status(200).json({
+      success: true,
+      data: {"Show details" : show_details},
+      msg: 'Showing the show details',
+      error: {},
+    });
+  }
+  }catch (err) {
+    return handleError(err,res);
+  }
+};
