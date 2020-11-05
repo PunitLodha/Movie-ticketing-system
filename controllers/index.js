@@ -79,12 +79,20 @@ export const register = async (req, res, next) => {
     return handleError(err, res);
   }
 
-  export const movies = function(req, res, next){
-  await getDB().query('SELECT Name \
-FROM (SELECT j.Name, SUM(No_of_seats) \
-FROM (Event e JOIN Show s ON e.EventID = s.EventID) j JOIN Ticket t ON j.ShowID = t.ShowID\ 
-GROUP BY (EventID) \
-ORDER BY 2 DESC) \
-LIMIT 5');
 };
+
+export const movies = async(res,req,next) => {
+ try{
+ const[movie_results] = await getDB.query(' SELECT name FROM (SELECT name,SUM(No_seats) FROM Movie JOIN Event USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY EventID ORDER BY 2 DESC LIMIT 5 )q;}');
+ const[play_results] =  await getDB.query(' SELECT name FROM (SELECT name,SUM(No_seats) FROM Play JOIN Event USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY EventID ORDER BY 2 DESC LIMIT 5 )q;}');
+ const[talk_show_results] = await getDB.query(' SELECT name FROM (SELECT name,SUM(No_seats) FROM Talk_show JOIN Event USING (EventID) JOIN SHOWS USING (EventID) JOIN Ticket USING (ShowID) GROUP BY EventID ORDER BY 2 DESC LIMIT 5 )q;}');
+ return res.status(200).json({
+  success : true,
+  data : {movie: movie_results , play : play_results ,talk_show : talk_show_results},
+  error : {},
+ })
+} catch (err) {
+  return handleError(err,res);
+} 
+
 };
