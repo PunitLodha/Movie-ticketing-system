@@ -7,7 +7,7 @@ import { get_card_details} from '../controllers/index.js';
 import { post_card_details} from '../controllers/index.js';
 import { get_seat_avail } from '../controllers/index.js';
 import { get_event_details } from '../controllers/index.js';
-
+import { get_shows} from '../controllers/index.js'
 import { all_movies } from '../controllers/index.js';
 
 const router = Router();
@@ -27,4 +27,6 @@ router.route('/shows/screen/tickets/booked').get(get_seat_avail);
 router.route('/shows/event').get(get_event_details);
 
 router.route('/all_movies').get(all_movies);
+
+router.route('/get_shows').post(get_shows);
 export default router;

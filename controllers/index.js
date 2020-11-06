@@ -87,7 +87,7 @@ export const ticket = async(req, res, next) =>{
 
      //check if no. of seats exceed 15
      if(no_seats>15) {
-        const err = new ErrorHandler(401, 'Cannot book more than 15 seats at a time');
+        const err = new ErrorHandler(403, 'Cannot book more than 15 seats at a time');
         return handleError(err, res);
      }
 
@@ -133,7 +133,7 @@ export const get_card_details = async(req, res, next) => {
 
     // card not found in the db
     if (!results[0]) {
-      error = new ErrorHandler(403, 'Found no card');
+      error = new ErrorHandler(404, 'Found no card');
       return handleError(error, res);
     }   
     return res.status(200).json({
@@ -222,12 +222,28 @@ export const get_event_details = async ( req, res, next) => {
       error = new ErrorHandler(404, 'No event found');
       return handleError(error, res);
     }
+    if (play[0]){
+      return res.status(200).json({
+        success: true,
+        data: {"Play" : play},
+        msg: 'Showing the play event',
+        error: {},
+      });
+    }else if(movie[0]){
     return res.status(200).json({
       success: true,
-      data: {"Play" : play, "Movie" : movie, "Talk show" : talk_show},
-      msg: 'Showing the event',
+      data: {"Movie" : movie},
+      msg: 'Showing the movie event',
       error: {},
     });
+  }else{
+    return res.status(200).json({
+      success: true,
+      data: {"Talk show" : talk_show},
+      msg: 'Showing the talk show event',
+      error: {},
+    });
+  }
   }catch (err) {
     return handleError(err,res);
   } 
@@ -246,3 +262,26 @@ export const all_movies = async(res,req,next) => {
    return handleError(err,res);
  } 
  };
+
+export const get_shows = async(res,req,next) => {
+  try{
+    const {eventID} = req.body;
+    const [show_details] = await getDB().query('SELECT * FROM (SELECT * FROM Event JOIN Shows USING (EventID) JOIN Screen USING (ScreenID) JOIN Theatre USING (TheatreID)) AS event_details WHERE event_details.eventID = ?', [eventID]);
+   
+    //wrong event id
+    if (!show_details[0]){
+      error = new ErrorHandler(404, 'No event found');
+      return handleError(error, res);
+    }
+    else{
+    return res.status(200).json({
+      success: true,
+      data: {"Show details" : show_details},
+      msg: 'Showing the show details',
+      error: {},
+    });
+  }
+  }catch (err) {
+    return handleError(err,res);
+  }
+};
