@@ -31,7 +31,7 @@ async function setupDb() {
     );
     await db.query(
       'CREATE TABLE IF NOT EXISTS theatre(theatreID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
-      name VARCHAR(20),location VARCHAR(20), phone VARCHAR(20), no_of_screens INT)',
+      theatreName VARCHAR(20),location VARCHAR(20), phone VARCHAR(20), no_of_screens INT)',
     );
 
     await db.query(
@@ -80,8 +80,6 @@ async function setupDb() {
       seat_number VARCHAR(45), CONSTRAINT fk1_user FOREIGN KEY (userID) REFERENCES user(userID), \
       CONSTRAINT fk_show FOREIGN KEY (showID) REFERENCES shows(showID))',
     );
-
-
 
     /* db.query('SELECT * FROM `user`', (err, results, fields) => {
       console.log(results); // results contains rows returned by server
