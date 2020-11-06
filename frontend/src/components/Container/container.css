@@ -1,0 +1,9 @@
+.out-container {
+  max-width: 1480px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  background-color: #fbf3f5;
+  min-height: 90vh;
+}

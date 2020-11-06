@@ -1,0 +1,28 @@
+.seat-container .seat {
+  border: 2px solid #f2003d;
+  border-radius: 5px;
+  border-top-left-radius: 42px;
+  border-top-right-radius: 42px;
+  width: 40px;
+  height: 44px;
+  background-color: #fffffe;
+  color: #f2003d;
+  cursor: pointer;
+}
+
+.seat-container .seat:hover {
+  background-color: #eb6a8a;
+  color: #fffffe;
+}
+
+.seat-container .seat:disabled {
+  background-color: gray;
+  color: #fffffe;
+  cursor: not-allowed;
+  border: 2px solid gray;
+}
+
+.seat-container .seat.active {
+  background-color: #f2003d;
+  color: #fffffe;
+}

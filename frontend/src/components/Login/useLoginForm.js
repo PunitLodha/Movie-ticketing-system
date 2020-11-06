@@ -68,6 +68,10 @@ const useForm = () => {
       console.log(data);
       localStorage.setItem('token', data.data.token);
       localStorage.setItem('isAdmin', data.data.user.isAdmin);
+      localStorage.setItem('email', data.data.user.email);
+      localStorage.setItem('userID', data.data.user.userID);
+      localStorage.setItem('mobile', data.data.user.mobile);
+      localStorage.setItem('name', data.data.user.name);
       setIsLoading(false);
       history.push('/');
     } catch (e) {

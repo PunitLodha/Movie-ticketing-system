@@ -1,0 +1,26 @@
+.show {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  background-color: #fffffe;
+  margin: 30px 10px;
+  border-radius: 10px;
+}
+
+.show:hover {
+  box-shadow: 4px 4px 8px 3px rgba(0, 0, 0, 0.12);
+}
+
+.show .book {
+  padding: 10px;
+  background-color: #f2003d;
+  color: #fffffe;
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 5px;
+  width: 140px;
+  height: 60px;
+  cursor: pointer;
+}
