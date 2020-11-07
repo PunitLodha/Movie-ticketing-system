@@ -41,21 +41,21 @@ async function setupDb() {
 
     await db.query(
       'CREATE TABLE IF NOT EXISTS event(eventID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, duration VARCHAR(20),\
-              lang VARCHAR(20), genre VARCHAR(20), name VARCHAR(20),description VARCHAR(1000))',
+              lang VARCHAR(20), genre VARCHAR(100), name VARCHAR(50),description VARCHAR(1000))',
     );
 
     await db.query(
-      'CREATE TABLE IF NOT EXISTS play(director VARCHAR(20), cast VARCHAR(20), eventID INT,  \
+      'CREATE TABLE IF NOT EXISTS play(director VARCHAR(50), cast VARCHAR(100), eventID INT,  \
                   CONSTRAINT fk_event FOREIGN KEY (eventID) REFERENCES event(eventID))',
     );
 
     await db.query(
-      'CREATE TABLE IF NOT EXISTS talk_show(speaker VARCHAR(20), eventID INT, \
+      'CREATE TABLE IF NOT EXISTS talk_show(speaker VARCHAR(50), eventID INT, \
                   CONSTRAINT fk2_event FOREIGN KEY (eventID) REFERENCES event(eventID))',
     );
 
     await db.query(
-      'CREATE TABLE IF NOT EXISTS movie(director VARCHAR(20), cast VARCHAR(20), rating INT, eventID INT, \
+      'CREATE TABLE IF NOT EXISTS movie(director VARCHAR(50), cast VARCHAR(100), rating INT, eventID INT, \
                   CONSTRAINT fk1_event FOREIGN KEY (eventID) REFERENCES event(eventID))',
     );
 
