@@ -95,11 +95,8 @@ export const ticket = async (req, res, next) => {
     const price = seats.map((get_seat_detail) => get_seat_detail.price);
     const row = seats.map((get_seat_detail) => get_seat_detail.ro);
 
-    // add new ticket
-    await getDB().query(
-      'INSERT INTO ticket(no_seats, userID, showID, seat_number) VALUES (?,?,?,?)',
-      [no_seats, userID, showID, String(seat_no)],
-    );
+    //Lock seat table
+    await getDB().query('LOCK TABLE seat WRITE');
 
     // add new seat
     let i;
@@ -109,6 +106,16 @@ export const ticket = async (req, res, next) => {
         [seat_no[i], type[i], price[i], row[i], screenID],
       );
     }
+
+    // add new ticket
+    await getDB().query(
+      'INSERT INTO ticket(no_seats, userID, showID, seat_number) VALUES (?,?,?,?)',
+      [no_seats, userID, showID, String(seat_no)],
+    );
+
+    //Unlock table
+    await getDB().query('UNLOCK TABLE');
+
     return res.status(200).json({
       success: true,
       data: {},
