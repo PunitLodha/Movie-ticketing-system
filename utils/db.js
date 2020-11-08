@@ -81,6 +81,15 @@ async function setupDb() {
       CONSTRAINT fk_show FOREIGN KEY (showID) REFERENCES shows(showID))',
     );
 
+    await db.query(
+      'CREATE TRIGGER seat_availability \
+       AFTER INSERT ON seat \
+       FOR EACH ROW \
+       BEGIN \
+        UPDATE shows SET seats_avail=seats_avail-1 WHERE screenID=New.screenID; \
+       END',
+    );
+
     /* db.query('SELECT * FROM `user`', (err, results, fields) => {
       console.log(results); // results contains rows returned by server
     }); */
