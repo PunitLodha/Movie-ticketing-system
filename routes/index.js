@@ -11,6 +11,8 @@ import {
   get_event_details,
   get_shows,
   all_movies,
+  all_plays,
+  all_shows,
 } from '../controllers/index.js';
 
 const router = Router();
@@ -32,5 +34,7 @@ router.route('/shows/event').post(get_event_details);
 router.route('/showlist').post(get_shows);
 
 router.route('/all_movies').get(all_movies);
+router.route('/all_plays').get(all_plays);
+router.route('/all_shows').get(all_shows);
 
 export default router;

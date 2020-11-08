@@ -95,7 +95,7 @@ export const ticket = async (req, res, next) => {
     const price = seats.map((get_seat_detail) => get_seat_detail.price);
     const row = seats.map((get_seat_detail) => get_seat_detail.ro);
 
-    //Lock seat table
+    // Lock seat table
     await getDB().query('LOCK TABLE seat WRITE');
 
     // add new seat
@@ -107,14 +107,15 @@ export const ticket = async (req, res, next) => {
       );
     }
 
+    await getDB().query('LOCK TABLE ticket WRITE');
     // add new ticket
     await getDB().query(
       'INSERT INTO ticket(no_seats, userID, showID, seat_number) VALUES (?,?,?,?)',
       [no_seats, userID, showID, String(seat_no)],
     );
 
-    //Unlock table
-    await getDB().query('UNLOCK TABLE');
+    // Unlock table
+    await getDB().query('UNLOCK TABLES');
 
     return res.status(200).json({
       success: true,
@@ -123,6 +124,7 @@ export const ticket = async (req, res, next) => {
       error: {},
     });
   } catch (err) {
+    await getDB().query('UNLOCK TABLES');
     return handleError(err, res);
   }
 };
@@ -205,13 +207,13 @@ export const get_seat_avail = async (req, res, next) => {
 export const movies = async (req, res, next) => {
   try {
     const [movie_results] = await getDB().query(
-      'SELECT m.*, e.* FROM movie m JOIN event e USING (eventID) JOIN shows USING (eventID) JOIN ticket USING (showID) GROUP BY e.eventID ORDER BY SUM(no_seats) DESC LIMIT 5;',
+      'SELECT *  FROM (SELECT SUM(no_seats),eventID FROM shows JOIN ticket USING(showID) join movie using (eventID) GROUP BY eventID  ORDER BY SUM(no_seats) DESC limit 4)q JOIN event USING (eventID) join movie using (eventID)',
     );
     const [play_results] = await getDB().query(
-      'SELECT p.*, e.* FROM play p JOIN event e USING (eventID) JOIN shows USING (eventID) JOIN ticket USING (showID) GROUP BY e.eventID ORDER BY SUM(no_seats) DESC LIMIT 5;',
+      'SELECT *  FROM (SELECT SUM(no_seats),eventID FROM shows JOIN ticket USING(showID) join play using (eventID) GROUP BY eventID  ORDER BY SUM(no_seats) DESC limit 4)q JOIN event USING (eventID) join play using (eventID)',
     );
     const [talk_show_results] = await getDB().query(
-      'SELECT t.*, e.* FROM talk_show t JOIN event e USING (eventID) JOIN shows USING (eventID) JOIN ticket USING (showID) GROUP BY e.eventID ORDER BY SUM(no_seats) DESC LIMIT 5;',
+      'SELECT *  FROM (SELECT SUM(no_seats),eventID FROM shows JOIN ticket USING(showID) join talk_show using (eventID) GROUP BY eventID  ORDER BY SUM(no_seats) DESC limit 4)q JOIN event USING (eventID) join talk_show using (eventID)',
     );
     return res.status(200).json({
       success: true,
@@ -278,17 +280,41 @@ export const get_event_details = async (req, res, next) => {
 export const all_movies = async (req, res, next) => {
   try {
     const [movie_results] = await getDB().query(
-      'SELECT m.*, e.* FROM movie m JOIN event e USING (eventID);',
-    );
-    const [play_results] = await getDB().query(
-      'SELECT p.*, e.* FROM play p JOIN event e USING (eventID);',
-    );
-    const [talk_show_results] = await getDB().query(
-      'SELECT t.*, e.* FROM talk_show t JOIN event e USING (eventID);',
+      'SELECT m.*, e.* FROM movie m JOIN event e USING (eventID)',
     );
     return res.status(200).json({
       success: true,
-      data: { movie: movie_results, play: play_results, talk_show: talk_show_results },
+      data: { movie_results },
+      error: {},
+    });
+  } catch (err) {
+    return handleError(err, res);
+  }
+};
+
+export const all_plays = async (req, res, next) => {
+  try {
+    const [play_results] = await getDB().query(
+      'SELECT p.*, e.* FROM play p JOIN event e USING (eventID)',
+    );
+    return res.status(200).json({
+      success: true,
+      data: { play_results },
+      error: {},
+    });
+  } catch (err) {
+    return handleError(err, res);
+  }
+};
+
+export const all_shows = async (req, res, next) => {
+  try {
+    const [talk_show_results] = await getDB().query(
+      'SELECT t.*, e.* FROM talk_show t JOIN event e USING (eventID)',
+    );
+    return res.status(200).json({
+      success: true,
+      data: { talk_show_results },
       error: {},
     });
   } catch (err) {
