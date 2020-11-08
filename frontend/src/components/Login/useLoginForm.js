@@ -1,9 +1,12 @@
+import { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { postEndPoint } from '../utils/Requests';
+import { LogContext } from '../LogContext';
 
 // custom hook for form state management
 const useForm = () => {
+  const { handleLogIn } = useContext(LogContext);
   const location = useLocation();
   let screenID,
     showID = null;
@@ -81,6 +84,7 @@ const useForm = () => {
       localStorage.setItem('mobile', data.data.user.mobile);
       localStorage.setItem('name', data.data.user.name);
       setIsLoading(false);
+      handleLogIn();
       if (screenID) {
         history.push('/book', {
           screenID,
@@ -90,6 +94,7 @@ const useForm = () => {
         history.push('/');
       }
     } catch (e) {
+      console.log(e);
       if (e.response.status === 403) {
         const responseError = e.response.data.error.msg;
         setInvalidCred(responseError);

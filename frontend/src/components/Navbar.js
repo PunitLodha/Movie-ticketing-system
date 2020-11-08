@@ -3,8 +3,11 @@ import { MenuItems } from './MenuItems';
 import { Button } from './Button';
 import './Navbar.css';
 import { Link, useHistory } from 'react-router-dom';
+import { useContext } from 'react';
+import { LogContext } from './LogContext';
 
 const Navbar = () => {
+  const { loggedIn, handleLogIn } = useContext(LogContext);
   const [clicked, setClicked] = useState(false);
 
   const history = useHistory();
@@ -14,7 +17,13 @@ const Navbar = () => {
   };
 
   const handleLogin = () => {
-    history.push('/login');
+    if (loggedIn) {
+      localStorage.clear();
+      handleLogIn();
+      history.push('/');
+    } else {
+      history.push('/login');
+    }
   };
 
   const handleLogo = () => {
@@ -40,7 +49,7 @@ const Navbar = () => {
           );
         })}
       </ul>
-      <Button onClick={handleLogin}>Login</Button>
+      <Button onClick={handleLogin}>{loggedIn ? 'Logout' : 'Login'}</Button>
     </nav>
   );
 };
