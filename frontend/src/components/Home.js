@@ -12,6 +12,7 @@ import movieImg from './images/movieImage.jpg';
 // import "react-slideshow-image/dist/styles.css";
 import { useHistory } from 'react-router-dom';
 import { getEndPoint } from './utils/Requests';
+import { Posters } from './PosterList';
 
 const images = [
   'https://image.tmdb.org/t/p/w1280/xJWPZIYOEFIjZpBL7SVBGnzRYXp.jpg',
@@ -90,7 +91,7 @@ const Home = () => {
                       }}
                     >
                       <div class="icon">
-                        <img src={movieImg}></img>
+                        <img src={`https://image.tmdb.org/t/p/w185${Posters[val.name]}`}></img>
                       </div>
                       <label>{val.name}</label>
                       <p>{`${val.description.slice(0, 120)}...`}</p>
@@ -113,7 +114,7 @@ const Home = () => {
                       }}
                     >
                       <div class="icon">
-                        <img src={movieImg}></img>
+                        <img src={`https://image.tmdb.org/t/p/w185${Posters[val.name]}`}></img>
                       </div>
                       <label>{val.name}</label>
                       <p>{`${val.description.slice(0, 120)}...`}</p>
@@ -136,7 +137,7 @@ const Home = () => {
                       }}
                     >
                       <div class="icon">
-                        <img src={movieImg}></img>
+                        <img src={`https://image.tmdb.org/t/p/w185${Posters[val.name]}`}></img>
                       </div>
                       <label>{val.name}</label>
                       <p>{`${val.description.slice(0, 120)}...`}</p>

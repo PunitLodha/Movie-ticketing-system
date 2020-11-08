@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { postEndPoint } from '../utils/Requests';
 import './eventDetails.css';
+import { Posters } from '../PosterList';
 
 const EventDetails = () => {
   const location = useLocation();
@@ -55,10 +56,7 @@ const EventDetails = () => {
             </button>
           </div>
           <div className="poster">
-            <img
-              src="https://image.tmdb.org/t/p/w342/5KCVkau1HEl7ZzfPsKAPM0sMiKc.jpg"
-              alt="poster"
-            />
+            <img src={`https://image.tmdb.org/t/p/w342${Posters[event.name]}`} alt="poster" />
           </div>
         </div>
       ) : null}

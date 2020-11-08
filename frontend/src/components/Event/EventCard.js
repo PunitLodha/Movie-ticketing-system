@@ -1,6 +1,7 @@
 import React from 'react';
 import './eventcard.css';
 import { useHistory } from 'react-router-dom';
+import { Posters } from '../PosterList';
 
 const EventCard = ({ event }) => {
   const history = useHistory();
@@ -12,7 +13,7 @@ const EventCard = ({ event }) => {
   };
   return (
     <div className="event-card">
-      <img src="https://image.tmdb.org/t/p/w154/pjeMs3yqRmFL3giJy4PMXWZTTPa.jpg" alt="" />
+      <img src={`https://image.tmdb.org/t/p/w154${Posters[name]}`} alt="" />
       <div className="details">
         <h3>{name}</h3>
         <p>
