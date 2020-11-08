@@ -81,6 +81,8 @@ async function setupDb() {
       CONSTRAINT fk_show FOREIGN KEY (showID) REFERENCES shows(showID))',
     );
 
+    await db.query('DROP TRIGGER IF EXISTS seat_availability');
+
     await db.query(
       'CREATE TRIGGER seat_availability \
        AFTER INSERT ON seat \
