@@ -44,9 +44,11 @@ const EventDetails = () => {
               <span>{event.duration} mins | </span>
               <span>{event.rating}</span>
             </p>
-            <p className="cast">
-              Cast:- <span className="names">{event.cast}</span>
-            </p>
+            {event.cast ? (
+              <p className="cast">
+                Cast:- <span className="names">{event.cast}</span>
+              </p>
+            ) : null}
             <p className="desc">{event.description}</p>
             <button className="book" onClick={handleClick}>
               Check shows

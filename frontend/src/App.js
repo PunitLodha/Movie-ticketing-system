@@ -8,7 +8,7 @@ import './App.css';
 import Container from './components/Container/Container';
 
 function App() {
-  const routes = ['/', '/payment', '/book', '/details', '/shows'];
+  const routes = ['/', '/payment', '/book', '/details', '/shows', '/movies', '/plays', '/talk'];
   return (
     <Router>
       <Navbar />

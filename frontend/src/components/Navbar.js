@@ -1,42 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MenuItems } from './MenuItems';
 import { Button } from './Button';
 import './Navbar.css';
+import { Link, useHistory } from 'react-router-dom';
 
-class Navbar extends React.Component {
-  state = { clicked: false };
+const Navbar = () => {
+  const [clicked, setClicked] = useState(false);
 
-  handleClick = () => {
-    this.setState({ clicked: !this.state.clicked });
+  const history = useHistory();
+
+  const handleClick = () => {
+    setClicked((prevState) => !prevState);
   };
-  render() {
-    return (
-      <nav className="navbarItems">
-        <h1 className="navbar-logo">
-          Logo<i className="fab fa-react"></i>
-        </h1>
-        <div className="menu-icon" onClick={this.handleClick}>
-          <i className={this.state.clicked ? 'fas fa-times' : 'fas fa-bars'}></i>
-        </div>
-        <ul className={this.state.clicked ? 'nav-menu active' : 'nav-menu'}>
-          {MenuItems.map((item, index) => {
-            return (
-              <li key={index}>
-                <a className={item.cName} href={item.url}>
-                  {item.title}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-        <Button>Sign Up</Button>
-      </nav>
-    );
-  }
-}
-// const Navbar = () => {
-//   return (
-//   );
-// };
+
+  const handleLogin = () => {
+    history.push('/login');
+  };
+
+  const handleLogo = () => {
+    history.push('/');
+  };
+
+  return (
+    <nav className="navbarItems">
+      <h1 className="navbar-logo" onClick={handleLogo}>
+        Movie <i className="fab fa-react"></i>
+      </h1>
+      <div className="menu-icon" onClick={handleClick}>
+        <i className={clicked ? 'fas fa-times' : 'fas fa-bars'}></i>
+      </div>
+      <ul className={clicked ? 'nav-menu active' : 'nav-menu'}>
+        {MenuItems.map((item, index) => {
+          return (
+            <li key={index}>
+              <Link className={item.cName} to={item.url}>
+                {item.title}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+      <Button onClick={handleLogin}>Login</Button>
+    </nav>
+  );
+};
 
 export default Navbar;

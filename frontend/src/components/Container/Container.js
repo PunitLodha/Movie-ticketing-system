@@ -6,6 +6,9 @@ import EventDetails from '../Event/EventDetails';
 import Book from '../Book/Book';
 import Payment from '../Payment/Payment';
 import Home from '../Home';
+import MovieList from '../Event/MovieList';
+import PlayList from '../Event/PlayList';
+import TalkList from '../Event/TalkList';
 
 const Container = () => {
   return (
@@ -16,6 +19,9 @@ const Container = () => {
         <Route exact path="/book" component={Book} />
         <Route exact path="/details" component={EventDetails} />
         <Route exact path="/shows" component={ShowList} />
+        <Route exact path="/movies" component={MovieList} />
+        <Route exact path="/plays" component={PlayList} />
+        <Route exact path="/talk" component={TalkList} />
       </Switch>
     </div>
   );

@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { postEndPoint } from '../utils/Requests';
 // custom hook for form state management
 const useForm = () => {
+  const location = useLocation();
+  let screenID,
+    showID = null;
+  if (location.state) {
+    screenID = location.state.screenID;
+    showID = location.state.showID;
+  }
+
   // function to validate inputs, returns the error statements
   const validateInputs = (values) => {
     const err = {
@@ -74,8 +82,14 @@ const useForm = () => {
       setIsLoading(true);
       await postEndPoint('/auth/users/register/', formData, null, history);
       setIsLoading(false);
-
-      history.push('/');
+      if (screenID) {
+        history.push('/book', {
+          screenID,
+          showID,
+        });
+      } else {
+        history.push('/');
+      }
     } catch (e) {
       if (e.response.status === 403) {
         const responseError = e.response.data.error.msg;
@@ -141,6 +155,8 @@ const useForm = () => {
     /* toggleShowPassword,
     toggleShowconfirmPassword, */
     isLoading,
+    screenID,
+    showID,
   };
 };
 

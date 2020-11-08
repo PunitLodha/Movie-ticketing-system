@@ -10,10 +10,18 @@ const Show = ({ show }) => {
   const history = useHistory();
 
   const handleClick = (event) => {
-    history.push('/book', {
-      screenID,
-      showID,
-    });
+    const userID = localStorage.getItem('userID');
+    if (userID) {
+      history.push('/book', {
+        screenID,
+        showID,
+      });
+    } else {
+      history.push('/login', {
+        screenID,
+        showID,
+      });
+    }
   };
 
   return (

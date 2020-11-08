@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import { Zoom } from 'react-slideshow-image';
 //import image1 from "./images/slide_1.jpg";
@@ -11,8 +11,14 @@ import movieImg from './images/movieImage.jpg';
 // style was imported in index.css
 // import "react-slideshow-image/dist/styles.css";
 import { useHistory } from 'react-router-dom';
+import { getEndPoint } from './utils/Requests';
 
-const images = [image2, image3, image4, image5];
+const images = [
+  'https://image.tmdb.org/t/p/w1280/xJWPZIYOEFIjZpBL7SVBGnzRYXp.jpg',
+  'https://image.tmdb.org/t/p/w1280/iNh3BivHyg5sQRPP1KOkzguEX0H.jpg',
+  'https://image.tmdb.org/t/p/w1280/4pfXAnWxOfEJsUgDPW0zqzs5UWv.jpg',
+  'https://image.tmdb.org/t/p/w1280/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg',
+];
 
 const zoomOutProperties = {
   duration: 5000,
@@ -38,9 +44,32 @@ const Slideshow = () => {
 // ################################################################################################
 const Home = () => {
   const history = useHistory();
-  const handleClick = () => {
+
+  const [movie, setMovie] = useState([]);
+  const [play, setPlay] = useState([]);
+  const [show, setShow] = useState([]);
+
+  useEffect(() => {
+    try {
+      const getData = async () => {
+        const res = await getEndPoint('/topmovies', null, history);
+        const { data } = res;
+        setMovie(data.data.movie);
+        setPlay(data.data.play);
+        setShow(data.data.talk_show);
+      };
+      getData();
+    } catch (e) {
+      const status = e.response.status;
+      if (status === 403 || status === 404) {
+        console.log(e);
+      }
+    }
+  }, [history]);
+
+  const handleClick = (eventID) => {
     history.push('/details', {
-      eventID: 16,
+      eventID,
     });
   };
 
@@ -48,110 +77,73 @@ const Home = () => {
     <div className="parent">
       <Slideshow />
       <div className="Cards">
-        <h3>Movies to watch</h3>
+        <h3>Top movies</h3>
         <div class="container">
           <div class="row">
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 1</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut
-                </p>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 2</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut
-                </p>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 3</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut
-                </p>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 4</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut.
-                </p>
-              </div>
-            </div>
+            {movie[0]
+              ? movie.map((val) => (
+                  <div class="col-3">
+                    <div
+                      class="box"
+                      onClick={() => {
+                        handleClick(val.eventID);
+                      }}
+                    >
+                      <div class="icon">
+                        <img src={movieImg}></img>
+                      </div>
+                      <label>{val.name}</label>
+                      <p>{`${val.description.slice(0, 120)}...`}</p>
+                    </div>
+                  </div>
+                ))
+              : null}
           </div>
         </div>
-
+        <h3>Top plays</h3>
         <div class="container">
           <div class="row">
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 5</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut
-                </p>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 6</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut
-                </p>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 7</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut
-                </p>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="box" onClick={handleClick}>
-                <div class="icon">
-                  <img src={movieImg}></img>
-                </div>
-                <label>Movie 8</label>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut.
-                </p>
-              </div>
-            </div>
+            {play[0]
+              ? play.map((val) => (
+                  <div class="col-3">
+                    <div
+                      class="box"
+                      onClick={() => {
+                        handleClick(val.eventID);
+                      }}
+                    >
+                      <div class="icon">
+                        <img src={movieImg}></img>
+                      </div>
+                      <label>{val.name}</label>
+                      <p>{`${val.description.slice(0, 120)}...`}</p>
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
+        </div>
+        <h3>Top shows</h3>
+        <div class="container">
+          <div class="row">
+            {show[0]
+              ? show.map((val) => (
+                  <div class="col-3">
+                    <div
+                      class="box"
+                      onClick={() => {
+                        handleClick(val.eventID);
+                      }}
+                    >
+                      <div class="icon">
+                        <img src={movieImg}></img>
+                      </div>
+                      <label>{val.name}</label>
+                      <p>{`${val.description.slice(0, 120)}...`}</p>
+                    </div>
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>

@@ -2,9 +2,19 @@ import React from 'react';
 import useForm from './useLoginForm';
 import Spinner from '../Spinner/Spinner';
 import './login.css';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const { handleChange, handleSubmit, error, values, isLoading, invalidCred } = useForm();
+  const {
+    handleChange,
+    handleSubmit,
+    error,
+    values,
+    isLoading,
+    invalidCred,
+    screenID,
+    showID,
+  } = useForm();
   return (
     <div className="login">
       <div className="container">
@@ -35,6 +45,14 @@ const Login = () => {
           </div>
           <input type="submit" className="submit" value="Submit" onSubmit={handleSubmit} />
         </form>
+        <Link
+          to={{
+            pathname: '/register',
+            state: { screenID, showID },
+          }}
+        >
+          Dont have an account? Register
+        </Link>
       </div>
     </div>
   );

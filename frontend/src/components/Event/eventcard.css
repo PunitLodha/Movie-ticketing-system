@@ -1,7 +1,7 @@
-.show {
+.event-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 30px;
   background-color: #fffffe;
   margin: 30px 10px;
@@ -9,11 +9,20 @@
   transition: all 0.3s;
 }
 
-.show:hover {
+.event-card:hover {
   box-shadow: 4px 4px 8px 3px rgba(0, 0, 0, 0.12);
 }
 
-.show .book {
+.event-card .more {
+  margin-left: auto;
+}
+
+.event-card img {
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+.event-card .book {
   padding: 10px;
   background-color: #f2003d;
   color: #fffffe;
@@ -24,4 +33,8 @@
   width: 140px;
   height: 60px;
   cursor: pointer;
+}
+
+.event-card .desc {
+  max-width: 800px;
 }

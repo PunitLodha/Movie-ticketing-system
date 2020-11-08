@@ -74,7 +74,7 @@
 .box {
   margin: 30px;
   border-radius: 7px;
-  padding: 10px 20px;
+  padding: 20px;
   text-align: center;
   background-color: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -84,4 +84,17 @@
 
 .box:hover {
   box-shadow: 4px 4px 8px 3px rgba(0, 0, 0, 0.12);
+}
+
+.box .icon {
+  margin-bottom: 20px;
+}
+
+.box .icon img {
+  border-radius: 8px;
+  width: 100%;
+}
+.box label {
+  font-weight: bold;
+  font-size: 24px;
 }

@@ -1,5 +1,5 @@
 .register {
-  height: 100vh;
+  height: 91vh;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -39,6 +39,8 @@
   border-radius: 5px;
   width: 100%;
   height: auto;
+  cursor: pointer;
+  margin-bottom: 40px;
 }
 
 .register .error {
@@ -47,6 +49,10 @@
   margin-top: 4px;
   margin-bottom: 30px;
   display: inline-block;
+}
+
+.register input {
+  width: 300px;
 }
 
 input {

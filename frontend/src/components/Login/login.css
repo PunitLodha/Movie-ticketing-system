@@ -1,5 +1,5 @@
 .login {
-  height: 100vh;
+  height: 91vh;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -39,6 +39,8 @@
   border-radius: 5px;
   width: 100%;
   height: auto;
+  margin-bottom: 40px;
+  cursor: pointer;
 }
 
 .login .error {
