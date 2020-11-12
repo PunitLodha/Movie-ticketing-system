@@ -27,7 +27,7 @@ const MovieList = () => {
 
   return (
     <div className="movielist">
-      <h2>All movies</h2>
+      <h2>All Movies</h2>
       {movies.map((event) => (
         <EventCard event={event} />
       ))}

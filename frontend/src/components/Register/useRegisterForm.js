@@ -83,7 +83,7 @@ const useForm = () => {
       await postEndPoint('/auth/users/register/', formData, null, history);
       setIsLoading(false);
       if (screenID) {
-        history.push('/book', {
+        history.push('/login', {
           screenID,
           showID,
         });

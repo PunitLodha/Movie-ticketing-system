@@ -27,7 +27,7 @@ const TalkList = () => {
 
   return (
     <div className="movielist">
-      <h2>All movies</h2>
+      <h2>All Shows</h2>
       {movies.map((event) => (
         <EventCard event={event} />
       ))}
